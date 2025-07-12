@@ -12,7 +12,7 @@ export const ConnectFourGame = ({ mode }: Props) => {
     <div className="bg-purple-300 px-4 py-10 flex flex-col items-center justify-start w-full min-h-screen">
       <BoardHeader />
 
-      <div className="flex flex-col lg:flex-row lg:items-center items-center justify-start w-full lg:max-w-[70%] mx-auto lg:gap-10 pb-24 md:pb-40">
+      <div className="flex flex-col lg:flex-row lg:items-center items-center justify-start w-full lg:max-w-[70vw] mx-auto lg:gap-10 pb-24 md:pb-40">
         <div className="lg:hidden gap-3 flex items-center justify-between w-[88%] max-w-[30rem] mb-10">
           <PlayerCard
             type="player_one"

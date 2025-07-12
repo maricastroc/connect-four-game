@@ -9,7 +9,7 @@ const HeaderButton = ({ label }: { label: string }) => (
 
 export const BoardHeader = () => {
   return (
-    <div className="flex items-center w-full justify-between gap-8 pb-12 lg:pb-6 max-w-[30rem]">
+    <div className="flex items-center w-full justify-between gap-8 pb-12 md:pb-10 max-w-[30rem] lg:max-w-[40rem]">
       <HeaderButton label="MENU" />
       <Image src={Logo} alt="App Logo" />
       <HeaderButton label="RESTART" />
