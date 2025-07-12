@@ -33,12 +33,13 @@ const optionsMap: Record<
   },
 }
 
-export const OptionsButton = ({ variant }: Props) => {
+export const OptionsButton = ({ variant, ...rest }: Props) => {
   const { text, icon, bgColor, textColor } = optionsMap[variant]
 
   return (
     <button
       className={`transition-all hover:shadow-[0_9px_0_0_#5C2DD5] hover:border-purple-500 flex items-center justify-between w-full ${bgColor} border-[3.5px] border-black px-5 h-[5.5rem] rounded-[1.25rem] shadow-[0_9px_0_0_black] active:translate-y-[4px] active:shadow-none transition-all`}
+      {...rest}
     >
       <p className={`text-md text-left mr-4 font-black ${textColor}`}>{text}</p>
       {icon}
