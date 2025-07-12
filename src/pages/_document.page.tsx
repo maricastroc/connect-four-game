@@ -8,7 +8,12 @@ export default function Document() {
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet"
         />
-        <link rel="icon" type="image/svg" href="/assets/images/favicon.svg" />
+        <link
+          rel="shortcut icon"
+          href="/static/favicon.png"
+          type="image/x-icon"
+          sizes="16x16"
+        />
       </Head>
       <body className="antialiased">
         <Main />
