@@ -6,6 +6,7 @@ export default {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
@@ -34,6 +35,6 @@ export default {
     },
   },
   plugins: [
-    require("tailwind-scrollbar"),
+    require('tailwind-scrollbar')({ nocompatible: true }),
   ],
 } satisfies Config;

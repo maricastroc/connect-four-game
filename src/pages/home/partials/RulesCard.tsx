@@ -1,7 +1,7 @@
 import { Check } from 'phosphor-react'
 
 type Props = {
-  onClick: () => void
+  onBack: () => void
 }
 
 const RuleSection = ({
@@ -41,7 +41,7 @@ const RuleList = () => {
   )
 }
 
-export const RulesCard = ({ onClick }: Props) => {
+export const RulesCard = ({ onBack }: Props) => {
   return (
     <div className="px-4 py-6 pb-16 md:pb-10 bg-purple-300 flex flex-col items-center justify-center w-full min-h-screen">
       <div className="bg-white shadow-[0_9.5px_0_0_black] rounded-[2.5rem] border-[3px] border-black flex flex-col md:p-10 p-5 items-center gap-8 w-full max-w-[30rem] relative pb-16">
@@ -64,7 +64,7 @@ export const RulesCard = ({ onClick }: Props) => {
 
         <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
           <button
-            onClick={onClick}
+            onClick={onBack}
             className="transition-all hover:shadow-[0_9px_0_0_#5C2DD5] hover:border-purple-500 bg-pink flex items-center justify-center rounded-full w-16 h-16 shadow-[0_5px_0_0_black] border-2 border-black"
           >
             <Check className="text-white" size={44} />
