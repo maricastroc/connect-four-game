@@ -43,7 +43,7 @@ const RuleList = () => {
 
 export const RulesCard = ({ onBack }: Props) => {
   return (
-    <div className="px-4 py-6 pb-16 md:pb-10 bg-purple-300 flex flex-col items-center justify-center w-full min-h-screen">
+    <div className="text-black px-4 py-6 pb-16 md:pb-10 bg-purple-300 flex flex-col items-center justify-center w-full min-h-screen">
       <div className="bg-white shadow-[0_9.5px_0_0_black] rounded-[2.5rem] border-[3px] border-black flex flex-col md:p-10 p-5 items-center gap-8 w-full max-w-[30rem] relative pb-16">
         <div className="flex flex-col gap-8 w-full">
           <h2 className="text-lg font-bold text-center">RULES</h2>
