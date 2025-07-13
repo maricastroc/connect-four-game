@@ -45,6 +45,8 @@ export const Board = ({
   setBoard,
   setScore,
 }: BoardProps) => {
+  const [startingPlayer, setStartingPlayer] = useState<'1' | '2'>('1')
+
   const [currentPlayer, setCurrentPlayer] = useState<'1' | '2'>('1')
 
   const [hoveredCol, setHoveredCol] = useState<number | null>(null)
@@ -59,12 +61,14 @@ export const Board = ({
     setHasGameStarted(true)
 
     if (isPlayAgainMode) {
-      setCurrentPlayer(currentPlayer === '1' ? '2' : '1')
+      const nextStarter = startingPlayer === '1' ? '2' : '1'
+      setStartingPlayer(nextStarter)
+      setCurrentPlayer(nextStarter)
     } else {
-      setCurrentPlayer('1')
+      setCurrentPlayer(startingPlayer)
     }
   }
-  console.log(currentPlayer)
+
   const handleColumnClick = (colIndex: number) => {
     if (!hasGameStarted) {
       return
