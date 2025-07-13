@@ -9,11 +9,13 @@ type GameGridProps = {
   onColumnClick: (colIndex: number) => void
   hoveredCol: number | null
   setHoveredCol: (col: number | null) => void
+  hasGameStarted: boolean
 }
 
 export const GameGrid = ({
   board,
   droppingPiece,
+  hasGameStarted,
   onColumnClick,
   setHoveredCol,
 }: GameGridProps) => {
@@ -30,9 +32,13 @@ export const GameGrid = ({
       {Array.from({ length: COLUMNS }).map((_, colIndex) => (
         <div
           key={`col-${colIndex}`}
-          className="relative h-full"
+          className={`relative h-full ${hasGameStarted && 'cursor-pointer'}`}
           onClick={() => onColumnClick(colIndex)}
-          onMouseEnter={() => setHoveredCol(colIndex)}
+          onMouseEnter={() => {
+            if (hasGameStarted) {
+              setHoveredCol(colIndex)
+            }
+          }}
           onMouseLeave={() => setHoveredCol(null)}
         >
           <div className="absolute top-0 left-0 right-0 h-full flex flex-col px-[4.5%] gap-[2%]">

@@ -22,6 +22,8 @@ export const Board = () => {
 
   const [droppingPiece, setDroppingPiece] = useState<PiecePosition | null>(null)
 
+  const [hasGameStarted, setHasGameStarted] = useState(false)
+
   function initializeBoard(): Cell[][] {
     return Array(ROWS)
       .fill(null)
@@ -29,6 +31,10 @@ export const Board = () => {
   }
 
   const handleColumnClick = (colIndex: number) => {
+    if (!hasGameStarted) {
+      return
+    }
+
     for (let rowIndex = ROWS - 1; rowIndex >= 0; rowIndex--) {
       if (!board[rowIndex][colIndex]) {
         const newBoard = [...board]
@@ -39,6 +45,7 @@ export const Board = () => {
           row: rowIndex,
           player: currentPlayer,
         })
+
         setCurrentPlayer(currentPlayer === '1' ? '2' : '1')
         break
       }
@@ -53,7 +60,7 @@ export const Board = () => {
   }, [droppingPiece])
 
   return (
-    <div className="relative w-full max-w-[500px] md:max-w-[632px] mx-auto aspect-[632/594]">
+    <div className="relative w-full max-w-[500px] md:min-w-[500px] md:max-w-[632px] mx-auto aspect-[632/594]">
       <BackgroundLayers />
 
       <GameGrid
@@ -62,13 +69,18 @@ export const Board = () => {
         onColumnClick={handleColumnClick}
         hoveredCol={hoveredCol}
         setHoveredCol={setHoveredCol}
+        hasGameStarted={hasGameStarted}
       />
 
       <WhiteLayer />
 
       <ColumnArrows hoveredCol={hoveredCol} />
 
-      <GameStatus currentPlayer={currentPlayer} />
+      <GameStatus
+        currentPlayer={currentPlayer}
+        hasGameStarted={hasGameStarted}
+        setHasGameStarted={(value) => setHasGameStarted(value)}
+      />
 
       <DropAnimationStyles />
     </div>

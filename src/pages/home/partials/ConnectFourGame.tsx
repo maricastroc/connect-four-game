@@ -19,7 +19,7 @@ export const ConnectFourGame = ({ mode }: Props) => {
         <BoardHeader />
 
         <div className="flex flex-col lg:flex-row lg:items-center items-center justify-start w-full lg:max-w-[70vw] mx-auto lg:gap-10 pb-32">
-          <div className="lg:hidden gap-3 flex items-center justify-between w-[88%] max-w-[30rem] mb-10">
+          <div className="lg:hidden gap-3 flex items-center justify-between w-[88%] md:min-w-[500px] md:max-w-[40rem] max-w-[30rem] mb-10">
             <PlayerCard
               type="player_one"
               name={mode === 'pvp' ? 'PLAYER 1' : 'YOU'}
@@ -33,14 +33,14 @@ export const ConnectFourGame = ({ mode }: Props) => {
           </div>
 
           <PlayerCard
-            className="hidden lg:flex"
+            className="hidden lg:flex min-w-[8rem]"
             type="player_one"
             name={mode === 'pvp' ? 'PLAYER 1' : 'YOU'}
             score={12}
           />
           <Board />
           <PlayerCard
-            className="hidden lg:flex"
+            className="hidden lg:flex min-w-[8rem]"
             type={mode === 'pvp' ? 'player_two' : 'cpu'}
             name={mode === 'pvp' ? 'PLAYER 2' : 'CPU'}
             score={12}
