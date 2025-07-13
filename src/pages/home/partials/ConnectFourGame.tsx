@@ -11,8 +11,8 @@ export const ConnectFourGame = ({ mode }: Props) => {
   return (
     <div className="relative w-full min-h-screen">
       <div className="absolute inset-0 z-0">
-        <div className="h-[75%] bg-purple-300" />
-        <div className="h-[25%] bg-purple-500 rounded-tl-[3rem] rounded-tr-[3rem]" />
+        <div className="h-[75%] md:h-[80%] lg:h-[75%] bg-purple-300" />
+        <div className="h-[25%] md:h-[20%] lg:h-[25%] bg-purple-500 rounded-tl-[3rem] rounded-tr-[3rem]" />
       </div>
 
       <div className="relative z-10 px-4 py-10 flex flex-col items-center justify-start w-full h-full">

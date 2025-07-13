@@ -53,7 +53,7 @@ export const Board = () => {
   }, [droppingPiece])
 
   return (
-    <div className="relative w-full max-w-[632px] mx-auto aspect-[632/594]">
+    <div className="relative w-full max-w-[500px] md:max-w-[632px] mx-auto aspect-[632/594]">
       <BackgroundLayers />
 
       <GameGrid
