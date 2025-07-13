@@ -12,7 +12,7 @@ type GameStatusProps = {
   hasGameStarted: boolean
   mode: Mode
   setCurrentPlayer: (player: Player) => void
-  resetBoard: () => void
+  resetBoard: (isPlayAgainMode: boolean) => void
   winner: Player | undefined
 }
 
@@ -25,6 +25,34 @@ export const GameStatus = ({
   setCurrentPlayer,
 }: GameStatusProps) => {
   const [countdown, setCountdown] = useState(30)
+
+  const getPlayerText = () => {
+    if (winner) {
+      if (mode === 'pvp') return `PLAYER ${winner}`
+
+      return winner === '1' ? 'YOU' : 'CPU'
+    } else if (!hasGameStarted) {
+      if (mode === 'pvc') {
+        return currentPlayer === '1' ? 'YOU START' : 'CPU STARTS'
+      }
+
+      return currentPlayer === '1' ? 'PLAYER 1 STARTS' : 'PLAYER 2 STARTS'
+    } else {
+      if (mode === 'pvc') {
+        return currentPlayer === '1' ? 'YOUR TURN' : 'CPU TURN'
+      }
+
+      return currentPlayer === '1' ? "PLAYER 1'S TURN" : "PLAYER 2'S TURN"
+    }
+  }
+
+  const getWinText = () => {
+    if (winner) {
+      if (mode === 'pvc' && winner === '1') return 'WIN!'
+      return 'WINS!'
+    }
+    return 'READY?'
+  }
 
   useEffect(() => {
     if (!hasGameStarted || winner) return
@@ -73,29 +101,15 @@ export const GameStatus = ({
         </>
       ) : (
         <div className="shadow-[0_9px_0_0_black] flex flex-col text-center items-center justify-center w-[13rem] sm:w-[18rem] bg-white p-3 py-2 border-2 border-black rounded-[1.2rem]">
-          <p className="text-xs text-black font-bold">
-            {winner
-              ? mode === 'pvp'
-                ? `PLAYER ${winner}`
-                : winner === '1'
-                ? 'YOU'
-                : 'CPU'
-              : currentPlayer === '1'
-              ? "PLAYER 1'S TURN"
-              : "PLAYER 2'S TURN"}
-          </p>
+          <p className="text-xs text-black font-bold">{getPlayerText()}</p>
           <h3 className="text-md sm:text-lg text-black font-bold">
-            {winner
-              ? mode === 'pvc' && winner === '1'
-                ? 'WIN!'
-                : 'WINS!'
-              : 'READY?'}
+            {getWinText()}
           </h3>
           <Button
             className="w-[8rem]"
             label={winner ? 'PLAY AGAIN' : 'PLAY'}
             onClick={() => {
-              resetBoard()
+              resetBoard(!!winner)
             }}
           />
         </div>

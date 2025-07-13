@@ -53,13 +53,18 @@ export const Board = ({
 
   const isVsCPU = mode === 'pvc'
 
-  function resetBoard() {
+  function resetBoard(isPlayAgainMode: boolean) {
     setBoard(initializeBoard())
     setWinner(undefined)
     setHasGameStarted(true)
-    setCurrentPlayer(currentPlayer === '1' ? '2' : '1')
-  }
 
+    if (isPlayAgainMode) {
+      setCurrentPlayer(currentPlayer === '1' ? '2' : '1')
+    } else {
+      setCurrentPlayer('1')
+    }
+  }
+  console.log(currentPlayer)
   const handleColumnClick = (colIndex: number) => {
     if (!hasGameStarted) {
       return
@@ -100,7 +105,7 @@ export const Board = ({
       return () => clearTimeout(timer)
     }
   }, [droppingPiece])
-
+  console.log(currentPlayer)
   useEffect(() => {
     if (!hasGameStarted || !isVsCPU || currentPlayer !== '2' || droppingPiece)
       return
