@@ -4,12 +4,16 @@ import { useState } from 'react'
 import { OptionsCard } from './partials/OptionsCard'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ConnectFourGame } from './partials/ConnectFourGame'
+import { Difficulty } from '@/types/difficulty'
+import { Mode } from '@/types/mode'
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<'menu' | 'rules' | 'game'>(
     'menu',
   )
-  const [gameMode, setGameMode] = useState<'pvp' | 'pvc'>()
+  const [gameMode, setGameMode] = useState<Mode>()
+
+  const [difficulty, setDifficulty] = useState<Difficulty>('hard')
 
   return (
     <>
@@ -57,6 +61,7 @@ export default function Home() {
           >
             <ConnectFourGame
               mode={gameMode}
+              difficulty={difficulty}
               onExit={() => setCurrentView('menu')}
             />
           </motion.div>
@@ -70,6 +75,7 @@ export default function Home() {
             className="fixed inset-0 z-10"
           >
             <OptionsCard
+              setDifficulty={(value: Difficulty) => setDifficulty(value)}
               onRules={() => setCurrentView('rules')}
               onStartGame={(mode) => {
                 setGameMode(mode)

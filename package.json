@@ -20,7 +20,8 @@
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
     "react-toastify": "^11.0.5",
-    "tailwind-scrollbar": "^3.1.0"
+    "tailwind-scrollbar": "^3.1.0",
+    "@radix-ui/react-dialog": "^1.0.4"
   },
   "devDependencies": {
     "@rocketseat/eslint-config": "^1.2.0",

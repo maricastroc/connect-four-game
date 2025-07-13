@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 
@@ -9,25 +10,54 @@ import { GameStatus } from './GameStatus'
 import { DropAnimationStyles } from './DropAnimationStyles'
 import { GameGrid } from './GameGrid'
 
-import { ANIMATION_DURATION, COLUMNS, ROWS } from '@/utils/constants'
+import { ANIMATION_DURATION, ROWS } from '@/utils/constants'
 import { Cell } from '@/types/cell'
 import { PiecePosition } from '@/types/piece-position'
+import { Difficulty } from '@/types/difficulty'
+import { getBestMove } from '@/utils/getBestMove'
+import { Score } from '@/types/score'
+import { checkWin } from '@/utils/checkWin'
+import { Player } from '@/types/player'
+import { Mode } from '@/types/mode'
+import { initializeBoard } from '@/utils/initializeBoard'
 
-export const Board = () => {
-  const [board, setBoard] = useState<Cell[][]>(initializeBoard())
+type BoardProps = {
+  mode: Mode
+  difficulty: Difficulty
+  score: Score
+  board: Cell[][]
+  winner: Player | undefined
+  hasGameStarted: boolean
+  setHasGameStarted: (value: boolean) => void
+  setWinner: (player: Player | undefined) => void
+  setBoard: (value: Cell[][]) => void
+  setScore: React.Dispatch<React.SetStateAction<Score>>
+}
 
+export const Board = ({
+  mode,
+  difficulty,
+  board,
+  winner,
+  hasGameStarted,
+  setHasGameStarted,
+  setWinner,
+  setBoard,
+  setScore,
+}: BoardProps) => {
   const [currentPlayer, setCurrentPlayer] = useState<'1' | '2'>('1')
 
   const [hoveredCol, setHoveredCol] = useState<number | null>(null)
 
   const [droppingPiece, setDroppingPiece] = useState<PiecePosition | null>(null)
 
-  const [hasGameStarted, setHasGameStarted] = useState(false)
+  const isVsCPU = mode === 'pvc'
 
-  function initializeBoard(): Cell[][] {
-    return Array(ROWS)
-      .fill(null)
-      .map(() => Array(COLUMNS).fill(null))
+  function resetBoard() {
+    setBoard(initializeBoard())
+    setWinner(undefined)
+    setHasGameStarted(true)
+    setCurrentPlayer(currentPlayer === '1' ? '2' : '1')
   }
 
   const handleColumnClick = (colIndex: number) => {
@@ -46,6 +76,18 @@ export const Board = () => {
           player: currentPlayer,
         })
 
+        if (checkWin(newBoard, currentPlayer)) {
+          setWinner(currentPlayer)
+
+          setScore((prev) => ({
+            ...prev,
+            [currentPlayer]: prev[currentPlayer] + 1,
+          }))
+
+          setHasGameStarted(false)
+          return
+        }
+
         setCurrentPlayer(currentPlayer === '1' ? '2' : '1')
         break
       }
@@ -58,6 +100,21 @@ export const Board = () => {
       return () => clearTimeout(timer)
     }
   }, [droppingPiece])
+
+  useEffect(() => {
+    if (!hasGameStarted || !isVsCPU || currentPlayer !== '2' || droppingPiece)
+      return
+
+    const cpuPlayTimeout = setTimeout(() => {
+      const bestCol = getBestMove(board, difficulty)
+
+      if (bestCol !== null) {
+        handleColumnClick(bestCol)
+      }
+    }, 400)
+
+    return () => clearTimeout(cpuPlayTimeout)
+  }, [currentPlayer, hasGameStarted, isVsCPU, board, droppingPiece])
 
   return (
     <div className="relative w-full max-w-[500px] md:min-w-[500px] md:max-w-[632px] mx-auto aspect-[632/594]">
@@ -79,7 +136,10 @@ export const Board = () => {
       <GameStatus
         currentPlayer={currentPlayer}
         hasGameStarted={hasGameStarted}
-        setHasGameStarted={(value) => setHasGameStarted(value)}
+        winner={winner}
+        setCurrentPlayer={(player) => setCurrentPlayer(player)}
+        mode={mode}
+        resetBoard={resetBoard}
       />
 
       <DropAnimationStyles />
