@@ -2,9 +2,9 @@ import { OptionsButton } from '@/components/OptionsButton'
 import Logo from '../../../../public/assets/images/logo.svg'
 import Image from 'next/image'
 import { Difficulty } from '@/types/difficulty'
-import * as Dialog from '@radix-ui/react-dialog'
 import { useState } from 'react'
-import { DifficultyModal } from '@/components/DifficutyModal'
+import { GameModal } from '@/components/GameModal'
+import { AnimatePresence } from 'framer-motion'
 
 type Props = {
   onRules: () => void
@@ -13,7 +13,25 @@ type Props = {
 }
 
 export const OptionsCard = ({ setDifficulty, onRules, onStartGame }: Props) => {
-  const [isDifficultyModalOpen, setIsDifficultyModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const difficultyStyleMap = {
+    easy: { bgColor: 'bg-white', textColor: 'text-black' },
+    normal: { bgColor: 'bg-yellow', textColor: 'text-black' },
+    hard: { bgColor: 'bg-pink', textColor: 'text-white' },
+  } as const
+
+  const buttons = (['easy', 'normal', 'hard'] as const).map((level) => ({
+    key: level,
+    text: level,
+    bgColor: difficultyStyleMap[level].bgColor,
+    textColor: difficultyStyleMap[level].textColor,
+    onClick: () => {
+      setDifficulty(level)
+      onStartGame()
+      setIsModalOpen(false)
+    },
+  }))
 
   return (
     <div className="bg-purple-300 md:bg-purple-500 flex flex-col items-center justify-center w-full min-h-screen">
@@ -21,24 +39,37 @@ export const OptionsCard = ({ setDifficulty, onRules, onStartGame }: Props) => {
         <Image src={Logo} alt="App Logo" />
 
         <div className="flex flex-col gap-6 w-full">
-          <Dialog.Root open={isDifficultyModalOpen}>
-            <Dialog.Trigger asChild>
-              <OptionsButton
-                variant="player-vs-cpu"
-                onClick={() => setIsDifficultyModalOpen(true)}
+          <OptionsButton
+            variant="player-vs-cpu"
+            text="PLAY VS CPU"
+            bgColor="bg-pink"
+            textColor="text-white"
+            onClick={() => setIsModalOpen(true)}
+          />
+          <AnimatePresence>
+            {isModalOpen && (
+              <GameModal
+                isVisible={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title="SET LEVEL"
+                buttons={buttons}
               />
-            </Dialog.Trigger>
-            <DifficultyModal
-              setDifficulty={(value) => setDifficulty(value)}
-              onStartGame={() => onStartGame('pvc')}
-              onClose={() => setIsDifficultyModalOpen(false)}
-            />
-          </Dialog.Root>
+            )}
+          </AnimatePresence>
           <OptionsButton
             variant="player-vs-player"
+            text="PLAY VS PLAYER"
+            bgColor="bg-yellow"
+            textColor="text-black"
             onClick={() => onStartGame('pvp')}
           />
-          <OptionsButton variant="rules" onClick={onRules} />
+          <OptionsButton
+            bgColor="bg-white"
+            textColor="text-black"
+            text="GAME RULES"
+            variant="rules"
+            onClick={onRules}
+          />
         </div>
       </div>
     </div>

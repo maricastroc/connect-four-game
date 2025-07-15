@@ -28,10 +28,15 @@ type BoardProps = {
   board: Cell[][]
   winner: Player | undefined
   hasGameStarted: boolean
+  isGamePaused: boolean
   setHasGameStarted: (value: boolean) => void
   setWinner: (player: Player | undefined) => void
   setBoard: (value: Cell[][]) => void
   setScore: React.Dispatch<React.SetStateAction<Score>>
+  currentPlayer: Player
+  setCurrentPlayer: (player: Player) => void
+  startingPlayer: Player
+  setStartingPlayer: (player: Player) => void
 }
 
 export const Board = ({
@@ -40,15 +45,16 @@ export const Board = ({
   board,
   winner,
   hasGameStarted,
+  isGamePaused,
+  currentPlayer,
+  startingPlayer,
+  setCurrentPlayer,
+  setStartingPlayer,
   setHasGameStarted,
   setWinner,
   setBoard,
   setScore,
 }: BoardProps) => {
-  const [startingPlayer, setStartingPlayer] = useState<'1' | '2'>('1')
-
-  const [currentPlayer, setCurrentPlayer] = useState<'1' | '2'>('1')
-
   const [hoveredCol, setHoveredCol] = useState<number | null>(null)
 
   const [droppingPiece, setDroppingPiece] = useState<PiecePosition | null>(null)
@@ -109,7 +115,7 @@ export const Board = ({
       return () => clearTimeout(timer)
     }
   }, [droppingPiece])
-  console.log(currentPlayer)
+
   useEffect(() => {
     if (!hasGameStarted || !isVsCPU || currentPlayer !== '2' || droppingPiece)
       return
@@ -146,6 +152,7 @@ export const Board = ({
         currentPlayer={currentPlayer}
         hasGameStarted={hasGameStarted}
         winner={winner}
+        isGamePaused={isGamePaused}
         setCurrentPlayer={(player) => setCurrentPlayer(player)}
         mode={mode}
         resetBoard={resetBoard}

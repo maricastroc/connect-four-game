@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { Player } from '@/types/player'
 import { Mode } from '@/types/mode'
@@ -11,6 +11,7 @@ type GameStatusProps = {
   currentPlayer: Player
   hasGameStarted: boolean
   mode: Mode
+  isGamePaused: boolean
   setCurrentPlayer: (player: Player) => void
   resetBoard: (isPlayAgainMode: boolean) => void
   winner: Player | undefined
@@ -21,10 +22,13 @@ export const GameStatus = ({
   hasGameStarted,
   winner,
   mode,
+  isGamePaused,
   resetBoard,
   setCurrentPlayer,
 }: GameStatusProps) => {
   const [countdown, setCountdown] = useState(30)
+
+  const prevPlayerRef = useRef<Player>(currentPlayer)
 
   const getPlayerText = () => {
     if (winner) {
@@ -53,11 +57,20 @@ export const GameStatus = ({
     }
     return 'READY?'
   }
-
+  console.log(prevPlayerRef.current, currentPlayer)
   useEffect(() => {
-    if (!hasGameStarted || winner) return
+    if (!hasGameStarted) {
+      setCountdown(30)
+      return
+    }
 
-    setCountdown(30)
+    if (winner || isGamePaused) return
+
+    if (prevPlayerRef.current !== currentPlayer) {
+      setCountdown(30)
+      prevPlayerRef.current = currentPlayer
+    }
+
     const interval = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -70,7 +83,7 @@ export const GameStatus = ({
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [hasGameStarted, currentPlayer, winner])
+  }, [hasGameStarted, currentPlayer, winner, isGamePaused])
 
   const isTurn = hasGameStarted && !winner
 
@@ -92,7 +105,7 @@ export const GameStatus = ({
             }`}
           >
             <p className="mt-[0.5rem] sm:mt-0 text-xs sm:text-sm font-bold">
-              {currentPlayer === '1' ? "PLAYER 1'S TURN" : "PLAYER 2'S TURN"}
+              {getPlayerText()}
             </p>
             <h3 className="mt-[-0.5rem] sm:mt-0 text-lg font-bold">
               {countdown}s
