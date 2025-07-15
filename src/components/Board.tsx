@@ -59,12 +59,15 @@ export const Board = ({
 
   const [droppingPiece, setDroppingPiece] = useState<PiecePosition | null>(null)
 
+  const [winningCells, setWinningCells] = useState<[number, number][]>([])
+
   const isVsCPU = mode === 'pvc'
-  console.log(currentPlayer)
+
   function resetBoard(isPlayAgainMode: boolean) {
     setBoard(initializeBoard())
     setWinner(undefined)
     setHasGameStarted(true)
+    setWinningCells([])
 
     if (isPlayAgainMode) {
       const nextStarter = startingPlayer === '1' ? '2' : '1'
@@ -76,9 +79,7 @@ export const Board = ({
   }
 
   const handleColumnClick = (colIndex: number) => {
-    if (!hasGameStarted) {
-      return
-    }
+    if (!hasGameStarted) return
 
     for (let rowIndex = ROWS - 1; rowIndex >= 0; rowIndex--) {
       if (!board[rowIndex][colIndex]) {
@@ -91,8 +92,11 @@ export const Board = ({
           player: currentPlayer,
         })
 
-        if (checkWin(newBoard, currentPlayer)) {
+        // NOVO: chama checkWin que retorna [boolean, positions]
+        const [didWin, winningPositions] = checkWin(newBoard, currentPlayer)
+        if (didWin) {
           setWinner(currentPlayer)
+          setWinningCells(winningPositions) // <- precisa desse estado no componente
 
           setScore((prev) => ({
             ...prev,
@@ -142,6 +146,7 @@ export const Board = ({
         hoveredCol={hoveredCol}
         setHoveredCol={setHoveredCol}
         hasGameStarted={hasGameStarted}
+        winningCells={winningCells}
       />
 
       <WhiteLayer />

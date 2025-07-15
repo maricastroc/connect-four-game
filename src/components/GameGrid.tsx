@@ -10,12 +10,14 @@ type GameGridProps = {
   hoveredCol: number | null
   setHoveredCol: (col: number | null) => void
   hasGameStarted: boolean
+  winningCells: [number, number][]
 }
 
 export const GameGrid = ({
   board,
   droppingPiece,
   hasGameStarted,
+  winningCells,
   onColumnClick,
   setHoveredCol,
 }: GameGridProps) => {
@@ -42,17 +44,24 @@ export const GameGrid = ({
           onMouseLeave={() => setHoveredCol(null)}
         >
           <div className="absolute top-0 left-0 right-0 h-full flex flex-col px-[4.5%] gap-[2%]">
-            {Array.from({ length: ROWS }).map((_, rowIndex) => (
-              <GameSlot
-                key={`slot-${colIndex}-${rowIndex}`}
-                cell={board[rowIndex][colIndex]}
-                isDropping={
-                  droppingPiece?.col === colIndex &&
-                  droppingPiece?.row === rowIndex
-                }
-                player={droppingPiece?.player}
-              />
-            ))}
+            {Array.from({ length: ROWS }).map((_, rowIndex) => {
+              const isWinningCell = winningCells.some(
+                ([r, c]) => r === rowIndex && c === colIndex,
+              )
+
+              return (
+                <GameSlot
+                  key={`slot-${colIndex}-${rowIndex}`}
+                  cell={board[rowIndex][colIndex]}
+                  isDropping={
+                    droppingPiece?.col === colIndex &&
+                    droppingPiece?.row === rowIndex
+                  }
+                  player={droppingPiece?.player}
+                  isWinningCell={isWinningCell}
+                />
+              )
+            })}
           </div>
         </div>
       ))}

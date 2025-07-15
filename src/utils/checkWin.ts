@@ -1,7 +1,10 @@
 import { Cell } from '@/types/cell'
 import { COLUMNS, ROWS } from './constants'
 
-export function checkWin(board: Cell[][], player: '1' | '2'): boolean {
+export function checkWin(
+  board: Cell[][],
+  player: '1' | '2',
+): [boolean, [number, number][]] {
   const directions = [
     [0, 1],
     [1, 0],
@@ -14,7 +17,7 @@ export function checkWin(board: Cell[][], player: '1' | '2'): boolean {
       if (board[row][col] !== player) continue
 
       for (const [dx, dy] of directions) {
-        let count = 1
+        const positions: [number, number][] = [[row, col]]
 
         for (let i = 1; i < 4; i++) {
           const newRow = row + dx * i
@@ -27,16 +30,16 @@ export function checkWin(board: Cell[][], player: '1' | '2'): boolean {
             newCol < COLUMNS &&
             board[newRow][newCol] === player
           ) {
-            count++
+            positions.push([newRow, newCol])
           } else {
             break
           }
         }
 
-        if (count >= 4) return true
+        if (positions.length >= 4) return [true, positions]
       }
     }
   }
 
-  return false
+  return [false, []]
 }
