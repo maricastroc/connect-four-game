@@ -60,7 +60,7 @@ export const Board = ({
   const [droppingPiece, setDroppingPiece] = useState<PiecePosition | null>(null)
 
   const isVsCPU = mode === 'pvc'
-
+  console.log(currentPlayer)
   function resetBoard(isPlayAgainMode: boolean) {
     setBoard(initializeBoard())
     setWinner(undefined)

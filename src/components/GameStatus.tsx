@@ -29,7 +29,7 @@ export const GameStatus = ({
   const [countdown, setCountdown] = useState(30)
 
   const prevPlayerRef = useRef<Player>(currentPlayer)
-
+  console.log(mode)
   const getPlayerText = () => {
     if (winner) {
       if (mode === 'pvp') return `PLAYER ${winner}`
@@ -57,7 +57,7 @@ export const GameStatus = ({
     }
     return 'READY?'
   }
-  console.log(prevPlayerRef.current, currentPlayer)
+
   useEffect(() => {
     if (!hasGameStarted) {
       setCountdown(30)

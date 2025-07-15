@@ -28,7 +28,7 @@ export const OptionsCard = ({ setDifficulty, onRules, onStartGame }: Props) => {
     textColor: difficultyStyleMap[level].textColor,
     onClick: () => {
       setDifficulty(level)
-      onStartGame()
+      onStartGame('pvc')
       setIsModalOpen(false)
     },
   }))

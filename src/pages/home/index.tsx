@@ -11,6 +11,7 @@ export default function Home() {
   const [currentView, setCurrentView] = useState<'menu' | 'rules' | 'game'>(
     'menu',
   )
+
   const [gameMode, setGameMode] = useState<Mode>()
 
   const [difficulty, setDifficulty] = useState<Difficulty>('hard')
@@ -75,7 +76,9 @@ export default function Home() {
             className="fixed inset-0 z-10"
           >
             <OptionsCard
-              setDifficulty={(value: Difficulty) => setDifficulty(value)}
+              setDifficulty={(value: Difficulty) => {
+                setDifficulty(value)
+              }}
               onRules={() => setCurrentView('rules')}
               onStartGame={(mode) => {
                 setGameMode(mode)
