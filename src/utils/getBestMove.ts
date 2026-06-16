@@ -13,7 +13,11 @@ function getNextEmptyRow(board: Cell[][], col: number): number {
   return -1
 }
 
-function simulateMove(board: Cell[][], col: number, player: '1' | '2'): Cell[][] {
+function simulateMove(
+  board: Cell[][],
+  col: number,
+  player: '1' | '2',
+): Cell[][] {
   const newBoard = board.map((row) => [...row])
   const row = getNextEmptyRow(newBoard, col)
   if (row !== -1) newBoard[row][col] = player
@@ -72,7 +76,12 @@ function evaluatePosition(board: Cell[][], player: '1' | '2'): number {
     for (let col = 0; col < COLUMNS; col++) {
       if (col <= COLUMNS - 4) {
         score += evaluateSequence(
-          [board[row][col], board[row][col + 1], board[row][col + 2], board[row][col + 3]],
+          [
+            board[row][col],
+            board[row][col + 1],
+            board[row][col + 2],
+            board[row][col + 3],
+          ],
           player,
           opponent,
         )
@@ -80,7 +89,12 @@ function evaluatePosition(board: Cell[][], player: '1' | '2'): number {
 
       if (row <= ROWS - 4) {
         score += evaluateSequence(
-          [board[row][col], board[row + 1][col], board[row + 2][col], board[row + 3][col]],
+          [
+            board[row][col],
+            board[row + 1][col],
+            board[row + 2][col],
+            board[row + 3][col],
+          ],
           player,
           opponent,
         )
@@ -122,7 +136,11 @@ function evaluatePosition(board: Cell[][], player: '1' | '2'): number {
   return score
 }
 
-function evaluateSequence(sequence: Cell[], player: '1' | '2', opponent: '1' | '2'): number {
+function evaluateSequence(
+  sequence: Cell[],
+  player: '1' | '2',
+  opponent: '1' | '2',
+): number {
   let playerCount = 0
   let opponentCount = 0
   let emptyCount = 0
@@ -174,7 +192,14 @@ function minimax(
     if (row === -1) continue
 
     const newBoard = simulateMove(board, col, isMaximizing ? player : opponent)
-    const [, score] = minimax(newBoard, depth - 1, !isMaximizing, alpha, beta, player)
+    const [, score] = minimax(
+      newBoard,
+      depth - 1,
+      !isMaximizing,
+      alpha,
+      beta,
+      player,
+    )
 
     if (isMaximizing) {
       if (score > bestScore) {
@@ -196,7 +221,10 @@ function minimax(
   return [bestCol, bestScore]
 }
 
-export function getBestMove(board: Cell[][], difficulty: Difficulty): number | null {
+export function getBestMove(
+  board: Cell[][],
+  difficulty: Difficulty,
+): number | null {
   const availableCols = getAvailableColumns(board)
   if (availableCols.length === 0) return null
 
@@ -218,7 +246,9 @@ export function getBestMove(board: Cell[][], difficulty: Difficulty): number | n
 
     case 'normal': {
       const center = Math.floor(COLUMNS / 2)
-      const centerCols = availableCols.filter((col) => Math.abs(col - center) <= 1)
+      const centerCols = availableCols.filter(
+        (col) => Math.abs(col - center) <= 1,
+      )
       if (centerCols.length > 0) {
         return centerCols[Math.floor(Math.random() * centerCols.length)]
       }

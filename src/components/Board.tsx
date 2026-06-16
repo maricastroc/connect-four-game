@@ -56,7 +56,15 @@ export const Board = () => {
         setCurrentPlayer(startingPlayer)
       }
     },
-    [startingPlayer, setBoard, setWinner, setHasGameStarted, setWinningCells, setStartingPlayer, setCurrentPlayer],
+    [
+      startingPlayer,
+      setBoard,
+      setWinner,
+      setHasGameStarted,
+      setWinningCells,
+      setStartingPlayer,
+      setCurrentPlayer,
+    ],
   )
 
   const handleColumnClick = useCallback(
@@ -68,13 +76,20 @@ export const Board = () => {
           const newBoard = board.map((row) => [...row])
           newBoard[rowIndex][colIndex] = currentPlayer
           setBoard(newBoard)
-          setDroppingPiece({ col: colIndex, row: rowIndex, player: currentPlayer })
+          setDroppingPiece({
+            col: colIndex,
+            row: rowIndex,
+            player: currentPlayer,
+          })
 
           const [didWin, winningPositions] = checkWin(newBoard, currentPlayer)
           if (didWin) {
             setWinner(currentPlayer)
             setWinningCells(winningPositions)
-            setScore((prev) => ({ ...prev, [currentPlayer]: prev[currentPlayer] + 1 }))
+            setScore((prev) => ({
+              ...prev,
+              [currentPlayer]: prev[currentPlayer] + 1,
+            }))
             setHasGameStarted(false)
             return
           }
@@ -84,7 +99,17 @@ export const Board = () => {
         }
       }
     },
-    [hasGameStarted, board, currentPlayer, setBoard, setWinner, setWinningCells, setScore, setHasGameStarted, setCurrentPlayer],
+    [
+      hasGameStarted,
+      board,
+      currentPlayer,
+      setBoard,
+      setWinner,
+      setWinningCells,
+      setScore,
+      setHasGameStarted,
+      setCurrentPlayer,
+    ],
   )
 
   useEffect(() => {
@@ -94,7 +119,8 @@ export const Board = () => {
   }, [droppingPiece])
 
   useEffect(() => {
-    if (!hasGameStarted || !isVsCPU || currentPlayer !== '2' || droppingPiece) return
+    if (!hasGameStarted || !isVsCPU || currentPlayer !== '2' || droppingPiece)
+      return
 
     const timer = setTimeout(() => {
       const bestCol = getBestMove(board, difficulty)
@@ -102,7 +128,15 @@ export const Board = () => {
     }, 400)
 
     return () => clearTimeout(timer)
-  }, [currentPlayer, hasGameStarted, isVsCPU, board, droppingPiece, difficulty, handleColumnClick])
+  }, [
+    currentPlayer,
+    hasGameStarted,
+    isVsCPU,
+    board,
+    droppingPiece,
+    difficulty,
+    handleColumnClick,
+  ])
 
   return (
     <div className="relative w-full max-w-[500px] md:min-w-[500px] md:max-w-[632px] mx-auto aspect-[632/594]">
@@ -141,13 +175,24 @@ const BackgroundLayers = () => (
   <>
     <div className="absolute inset-0 bg-purple rounded-[40px]" />
     <div className="absolute inset-0 z-10 pointer-events-none">
-      <Image src={BlackBoardLayer} alt="Black Layer" className="w-full h-full object-cover" />
+      <Image
+        src={BlackBoardLayer}
+        alt="Black Layer"
+        className="w-full h-full object-cover"
+      />
     </div>
   </>
 )
 
 const WhiteLayer = () => (
-  <div className="absolute inset-0 z-30 pointer-events-none" style={{ bottom: '10px' }}>
-    <Image src={WhiteBoardLayer} alt="White Layer" className="w-full h-full object-cover" />
+  <div
+    className="absolute inset-0 z-30 pointer-events-none"
+    style={{ bottom: '10px' }}
+  >
+    <Image
+      src={WhiteBoardLayer}
+      alt="White Layer"
+      className="w-full h-full object-cover"
+    />
   </div>
 )

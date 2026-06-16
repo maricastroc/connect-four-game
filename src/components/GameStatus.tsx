@@ -34,7 +34,8 @@ export const GameStatus = ({
       return winner === '1' ? 'YOU' : 'CPU'
     }
     if (!hasGameStarted) {
-      if (mode === 'pvc') return currentPlayer === '1' ? 'YOU START' : 'CPU STARTS'
+      if (mode === 'pvc')
+        return currentPlayer === '1' ? 'YOU START' : 'CPU STARTS'
       return currentPlayer === '1' ? 'PLAYER 1 STARTS' : 'PLAYER 2 STARTS'
     }
     if (mode === 'pvc') return currentPlayer === '1' ? 'YOUR TURN' : 'CPU TURN'
@@ -83,7 +84,11 @@ export const GameStatus = ({
       {isTurn ? (
         <>
           <Image
-            src={currentPlayer === '1' ? TurnBackgroundPlayer1 : TurnBackgroundPlayer2}
+            src={
+              currentPlayer === '1'
+                ? TurnBackgroundPlayer1
+                : TurnBackgroundPlayer2
+            }
             alt={`Turn background for player ${currentPlayer}`}
           />
           <div
@@ -91,14 +96,20 @@ export const GameStatus = ({
               currentPlayer === '1' ? 'text-white' : 'text-black'
             }`}
           >
-            <p className="mt-[0.5rem] sm:mt-0 text-xs sm:text-sm font-bold">{getPlayerText()}</p>
-            <h3 className="mt-[-0.5rem] sm:mt-0 text-lg font-bold">{countdown}s</h3>
+            <p className="mt-[0.5rem] sm:mt-0 text-xs sm:text-sm font-bold">
+              {getPlayerText()}
+            </p>
+            <h3 className="mt-[-0.5rem] sm:mt-0 text-lg font-bold">
+              {countdown}s
+            </h3>
           </div>
         </>
       ) : (
         <div className="shadow-[0_9px_0_0_black] flex flex-col text-center items-center justify-center w-[13rem] sm:w-[18rem] bg-white p-3 py-2 border-2 border-black rounded-[1.2rem]">
           <p className="text-xs text-black font-bold">{getPlayerText()}</p>
-          <h3 className="text-md sm:text-lg text-black font-bold">{getWinText()}</h3>
+          <h3 className="text-md sm:text-lg text-black font-bold">
+            {getWinText()}
+          </h3>
           <Button
             className="w-[8rem]"
             label={winner ? 'PLAY AGAIN' : 'PLAY'}

@@ -1,40 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Connect Four Game
+
+A fully responsive Connect Four game built with Next.js, TypeScript, and Tailwind CSS.
+
+![Preview](../connect-four-game/preview.jpg)
+
+## Features
+
+- Player vs Player and Player vs CPU modes
+- Three CPU difficulty levels: Easy, Normal, and Hard
+- Hard mode uses a **Minimax algorithm with Alpha-Beta pruning** for optimal play
+- Drop animation when placing a piece
+- 30-second turn timer — skips the turn if it runs out
+- Win detection with visual highlight of the winning sequence
+- Score tracking across rounds, with alternating starting player
+- Fully responsive layout (mobile, tablet, desktop)
+- Pause menu with continue, restart, and quit options
+
+## Tech Stack
+
+- [Next.js 15](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Framer Motion](https://www.framer-motion.com/) — drop animation and modal transitions
+- [Radix UI](https://www.radix-ui.com/) — accessible dialog/modal
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+cd app
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```
+src/
+├── components/       # UI components (Board, GameGrid, GameStatus, etc.)
+├── context/          # GameContext — global game state via React Context
+├── pages/            # Next.js pages and page-level components
+├── types/            # TypeScript type definitions
+└── utils/            # Game logic (checkWin, getBestMove, initializeBoard)
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+## Architecture Highlights
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Game state is managed through a single `GameContext`, avoiding prop drilling across the component tree. The `Board` component handles move logic and CPU turn scheduling via `useCallback` and `useEffect` with explicit dependencies.
 
-## Learn More
+The AI logic lives entirely in `utils/getBestMove.ts`:
 
-To learn more about Next.js, take a look at the following resources:
+| Difficulty | Behavior |
+|---|---|
+| Easy | Random valid column |
+| Normal | Prefers center columns |
+| Hard | Minimax (depth 5) with Alpha-Beta pruning and heuristic position scoring |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.

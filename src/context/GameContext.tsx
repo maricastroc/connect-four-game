@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react'
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+} from 'react'
 import { Cell } from '@/types/cell'
 import { Player } from '@/types/player'
 import { Score } from '@/types/score'
