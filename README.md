@@ -2,7 +2,7 @@
 
 A fully responsive Connect Four game built with Next.js, TypeScript, and Tailwind CSS.
 
-![Preview](../connect-four-game/preview.jpg)
+<img width="3204" height="1722" alt="connect-four" src="https://github.com/user-attachments/assets/1fbcc70f-565b-457d-bb0f-f898f1e4015c" />
 
 ## Features
 
