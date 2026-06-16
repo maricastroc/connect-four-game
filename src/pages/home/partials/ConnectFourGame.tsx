@@ -1,14 +1,10 @@
 import { Board } from '@/components/Board'
 import { PlayerCard } from '@/components/PlayerCard'
 import { BoardHeader } from '@/components/BoardHeader'
-import { Difficulty } from '@/types/difficulty'
-import { useState } from 'react'
-import { Score } from '@/types/score'
-import { Mode } from '@/types/mode'
-import { Cell } from '@/types/cell'
-import { initializeBoard } from '@/utils/initializeBoard'
-import { Player } from '@/types/player'
 import { GameModal } from '@/components/GameModal'
+import { GameProvider, useGame } from '@/context/GameContext'
+import { Difficulty } from '@/types/difficulty'
+import { Mode } from '@/types/mode'
 
 type Props = {
   mode: Mode
@@ -16,72 +12,57 @@ type Props = {
   onExit: () => void
 }
 
-export const ConnectFourGame = ({ mode, difficulty, onExit }: Props) => {
-  const [board, setBoard] = useState<Cell[][]>(initializeBoard())
+export const ConnectFourGame = ({ mode, difficulty, onExit }: Props) => (
+  <GameProvider mode={mode} difficulty={difficulty} onExit={onExit}>
+    <ConnectFourGameInner />
+  </GameProvider>
+)
 
-  const [score, setScore] = useState<Score>({ '1': 0, '2': 0 })
+const ConnectFourGameInner = () => {
+  const {
+    mode,
+    score,
+    isModalOpen,
+    setIsModalOpen,
+    setIsGamePaused,
+    restartBoard,
+    onExit,
+  } = useGame()
 
-  const [hasGameStarted, setHasGameStarted] = useState(false)
-
-  const [winner, setWinner] = useState<Player | undefined>()
-
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const [isGamePaused, setIsGamePaused] = useState(false)
-
-  const [startingPlayer, setStartingPlayer] = useState<'1' | '2'>('1')
-
-  const [currentPlayer, setCurrentPlayer] = useState<'1' | '2'>('1')
-
-  const restartBoard = () => {
-    setBoard(initializeBoard())
-    setWinner(undefined)
-    setHasGameStarted(false)
-    setScore({ '1': 0, '2': 0 })
-    setCurrentPlayer(startingPlayer)
-  }
-
-  type ModalOption = 'continue game' | 'restart' | 'quit game'
-
-  const modalOptionsStyleMap: Record<
-    ModalOption,
-    { bgColor: string; textColor: string; onClick: () => void }
-  > = {
-    'continue game': {
+  const modalButtons = [
+    {
+      key: 'continue game',
+      text: 'continue game',
       bgColor: 'bg-white',
       textColor: 'text-black',
-      onClick: () => setIsModalOpen(false),
+      onClick: () => {
+        setIsModalOpen(false)
+        setIsGamePaused(false)
+      },
     },
-    restart: {
+    {
+      key: 'restart',
+      text: 'restart',
       bgColor: 'bg-white',
       textColor: 'text-black',
       onClick: () => {
         restartBoard()
         setIsModalOpen(false)
+        setIsGamePaused(false)
       },
     },
-    'quit game': {
+    {
+      key: 'quit game',
+      text: 'quit game',
       bgColor: 'bg-pink',
       textColor: 'text-white',
       onClick: () => {
         onExit()
         setIsModalOpen(false)
+        setIsGamePaused(false)
       },
     },
-  }
-
-  const modalButtons = (
-    ['continue game', 'restart', 'quit game'] as ModalOption[]
-  ).map((option) => ({
-    key: option,
-    text: option,
-    bgColor: modalOptionsStyleMap[option].bgColor,
-    textColor: modalOptionsStyleMap[option].textColor,
-    onClick: () => {
-      modalOptionsStyleMap[option].onClick()
-      setIsGamePaused(false)
-    },
-  }))
+  ]
 
   return (
     <div className="relative w-full min-h-screen">
@@ -128,23 +109,7 @@ export const ConnectFourGame = ({ mode, difficulty, onExit }: Props) => {
             name={mode === 'pvp' ? 'PLAYER 1' : 'YOU'}
             score={score['1']}
           />
-          <Board
-            mode={mode}
-            difficulty={difficulty}
-            score={score}
-            setScore={setScore}
-            board={board}
-            setBoard={(value) => setBoard(value)}
-            winner={winner}
-            setWinner={(winner) => setWinner(winner)}
-            hasGameStarted={hasGameStarted}
-            setHasGameStarted={(value) => setHasGameStarted(value)}
-            isGamePaused={isGamePaused}
-            currentPlayer={currentPlayer}
-            startingPlayer={startingPlayer}
-            setCurrentPlayer={(player) => setCurrentPlayer(player)}
-            setStartingPlayer={(player) => setStartingPlayer(player)}
-          />
+          <Board />
           <PlayerCard
             className="hidden lg:flex min-w-[8rem]"
             type={mode === 'pvp' ? 'player_two' : 'cpu'}
